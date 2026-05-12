@@ -1,8 +1,9 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { PlayerInput, GameState, NetMessage } from './types';
-import { CANVAS_WIDTH, CANVAS_HEIGHT, KEYBOARD_CONTROLS } from './constants';
+import { CANVAS_WIDTH, CANVAS_HEIGHT, KEYBOARD_CONTROLS, MAX_SUPER } from './constants';
 import { createInitialState, updateGame, emptyInput } from './engine';
 import { NetworkManager } from './network';
+import TouchControls from './TouchControls';
 import {
   drawBackground, drawStickman, drawAura, drawHealthBar, drawEnergyBar,
   drawSuperBar, drawParticles, drawProjectiles, drawLightningBolts,
@@ -278,14 +279,18 @@ export default function GameCanvas({ network, playerName, onDisconnect }: Props)
     return () => cancelAnimationFrame(animRef.current);
   }, [network, isHost, buildInput, myRole]);
 
+  const localPlayer = isHost ? stateRef.current.player1 : stateRef.current.player2;
+  const superReady = localPlayer.superCharge >= MAX_SUPER;
+
   return (
-    <div ref={containerRef} className="w-full h-full flex items-center justify-center">
+    <div ref={containerRef} className="w-full h-full flex items-center justify-center relative">
       <canvas
         ref={canvasRef}
         width={CANVAS_WIDTH}
         height={CANVAS_HEIGHT}
         className="block rounded-lg"
       />
+      <TouchControls visible={true} onInputChange={handleTouchInput} superReady={superReady} />
     </div>
   );
 }

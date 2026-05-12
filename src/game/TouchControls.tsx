@@ -4,17 +4,18 @@ import { PlayerInput } from './types';
 interface Props {
   visible: boolean;
   onInputChange: (input: Partial<PlayerInput>) => void;
+  superReady: boolean;
 }
 
 // ─── COD/PUBG-Style Glass Button ────────────────────────
 function GlassBtn({
   children, keyName, size = 55, color = 'rgba(255,255,255,0.12)',
   borderColor = 'rgba(255,255,255,0.3)', activeColor = 'rgba(255,255,255,0.35)',
-  label, onStart, onEnd, pressed = false,
+  label, onStart, onEnd, pressed = false, glow = false,
 }: {
   children: React.ReactNode; keyName: string; size?: number;
   color?: string; borderColor?: string; activeColor?: string;
-  label?: string; pressed?: boolean;
+  label?: string; pressed?: boolean; glow?: boolean;
   onStart: (key: string) => void; onEnd: (key: string) => void;
 }) {
   return (
@@ -27,6 +28,8 @@ function GlassBtn({
           border: `1.5px solid ${pressed ? 'rgba(255,255,255,0.6)' : borderColor}`,
           boxShadow: pressed
             ? `0 0 25px ${borderColor}, inset 0 0 20px rgba(255,255,255,0.15)`
+            : glow
+            ? `0 4px 12px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.08), 0 0 20px ${borderColor}`
             : `0 4px 12px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.08)`,
           transform: pressed ? 'scale(0.9)' : 'scale(1)',
           WebkitTapHighlightColor: 'transparent',
@@ -47,7 +50,7 @@ function GlassBtn({
   );
 }
 
-export default function TouchControls({ visible, onInputChange }: Props) {
+export default function TouchControls({ visible, onInputChange, superReady }: Props) {
   const joyRef = useRef<HTMLDivElement>(null);
   const knobRef = useRef<HTMLDivElement>(null);
   const [joyActive, setJoyActive] = useState(false);
@@ -180,9 +183,7 @@ export default function TouchControls({ visible, onInputChange }: Props) {
             <GlassBtn keyName="punch" size={68}
               color="rgba(239,68,68,0.2)" borderColor="rgba(239,68,68,0.45)" activeColor="rgba(239,68,68,0.5)"
               label="PUNCH" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.punch}>
-              <svg viewBox="0 0 24 24" fill="white" className="w-8 h-8 drop-shadow">
-                <path d="M18.5 11c.83 0 1.5-.67 1.5-1.5V6c0-2.21-1.79-4-4-4h-2c-.77 0-1.47.3-2 .78-.53-.48-1.23-.78-2-.78H8C5.79 2 4 3.79 4 6v3.5C4 10.33 4.67 11 5.5 11c.55 0 1.04-.29 1.31-.73l.5.73h.19v1.25c0 .41.34.75.75.75s.75-.34.75-.75V11h4v1.25c0 .41.34.75.75.75s.75-.34.75-.75V11h.19l.5-.73c.27.44.76.73 1.31.73zM8 9V6c0-1.1.9-2 2-2h2v5H8zm8 0h-4V4h2c1.1 0 2 .9 2 2v3zM5 14v4c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-4H5zm8 6h-2v-4h2v4z"/>
-              </svg>
+              <img src="/punch.png" className="w-8 h-8 drop-shadow" alt="Punch" />
             </GlassBtn>
           </div>
 
@@ -191,9 +192,7 @@ export default function TouchControls({ visible, onInputChange }: Props) {
             <GlassBtn keyName="kick" size={54}
               color="rgba(239,68,68,0.15)" borderColor="rgba(239,68,68,0.35)" activeColor="rgba(239,68,68,0.4)"
               label="KICK" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.kick}>
-              <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7 drop-shadow">
-                <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM17.5 10.78c-1.23-.37-2.22-1.17-2.8-2.18l-1-1.6c-.41-.65-1.11-1-1.84-1-.78 0-1.59.5-1.78 1.44S7 13 7 13H4v7h3v-4l2.05-1.03L10.5 21H13l-1.4-6.03L13.7 13l1.8 1.62V20h2.5v-6.5l-2.5-2.72z"/>
-              </svg>
+              <img src="/kick.png" className="w-7 h-7 drop-shadow" alt="Kick" />
             </GlassBtn>
           </div>
 
@@ -202,9 +201,7 @@ export default function TouchControls({ visible, onInputChange }: Props) {
             <GlassBtn keyName="uppercut" size={50}
               color="rgba(251,146,60,0.18)" borderColor="rgba(251,146,60,0.4)" activeColor="rgba(251,146,60,0.45)"
               label="UPPER" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.uppercut}>
-              <svg viewBox="0 0 24 24" fill="white" className="w-6 h-6 drop-shadow">
-                <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/>
-              </svg>
+              <img src="/uppercut.png" className="w-6 h-6 drop-shadow" alt="Uppercut" />
             </GlassBtn>
           </div>
 
@@ -213,9 +210,7 @@ export default function TouchControls({ visible, onInputChange }: Props) {
             <GlassBtn keyName="block" size={50}
               color="rgba(34,197,94,0.15)" borderColor="rgba(34,197,94,0.4)" activeColor="rgba(34,197,94,0.4)"
               label="BLOCK" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.block}>
-              <svg viewBox="0 0 24 24" fill="white" className="w-6 h-6 drop-shadow">
-                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-              </svg>
+              <img src="/block.png" className="w-6 h-6 drop-shadow" alt="Block" />
             </GlassBtn>
           </div>
         </div>
@@ -228,34 +223,25 @@ export default function TouchControls({ visible, onInputChange }: Props) {
           <GlassBtn keyName="fireball" size={42}
             color="rgba(249,115,22,0.2)" borderColor="rgba(249,115,22,0.45)" activeColor="rgba(249,115,22,0.5)"
             label="FIRE" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.fireball}>
-            <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 drop-shadow">
-              <path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>
-            </svg>
+            <img src="/fire.png" className="w-5 h-5 drop-shadow" alt="Fireball" />
           </GlassBtn>
           <GlassBtn keyName="lightning" size={42}
             color="rgba(234,179,8,0.2)" borderColor="rgba(234,179,8,0.45)" activeColor="rgba(234,179,8,0.5)"
             label="BOLT" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.lightning}>
-            <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 drop-shadow">
-              <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
-            </svg>
+            <img src="/lighting.png" className="w-5 h-5 drop-shadow" alt="Lightning" />
           </GlassBtn>
         </div>
         <div className="flex gap-2">
           <GlassBtn keyName="teleport" size={42}
             color="rgba(139,92,246,0.2)" borderColor="rgba(139,92,246,0.45)" activeColor="rgba(139,92,246,0.5)"
             label="WARP" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.teleport}>
-            <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 drop-shadow opacity-90">
-              <circle cx="12" cy="12" r="3.5"/>
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" opacity="0.5"/>
-            </svg>
+            <img src="/teleport.png" className="w-5 h-5 drop-shadow opacity-90" alt="Teleport" />
           </GlassBtn>
           {/* SUPER — Larger, more prominent */}
           <GlassBtn keyName="special" size={50}
             color="rgba(236,72,153,0.2)" borderColor="rgba(236,72,153,0.5)" activeColor="rgba(236,72,153,0.55)"
-            label="SUPER" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.special}>
-            <svg viewBox="0 0 24 24" fill="white" className="w-6 h-6 drop-shadow">
-              <path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/>
-            </svg>
+            label="SUPER" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.special} glow={superReady}>
+            <img src="/super-attack.png" className="w-6 h-6 drop-shadow" alt="Super Attack" />
           </GlassBtn>
         </div>
       </div>

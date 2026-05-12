@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import Lobby from './game/Lobby';
 import GameCanvas from './game/GameCanvas';
-import TouchControls from './game/TouchControls';
+
 import AnimatedTutorial from './game/AnimatedTutorial';
 import { NetworkManager } from './game/network';
 import { PlayerInput } from './game/types';
@@ -101,14 +101,7 @@ export default function App() {
     } catch { /* ignore */ }
   }, [network]);
 
-  // Touch input relay
-  const handleTouchInput = useCallback((partial: Partial<PlayerInput>) => {
-    if ((window as any).__touchInput) {
-      (window as any).__touchInput(partial);
-    }
-  }, []);
 
-  const showControls = isMobile && isLandscape && screen === 'game';
   const showRotatePrompt = isMobile && !isLandscape && screen === 'game';
 
   return (
@@ -217,8 +210,7 @@ export default function App() {
             </div>
           )}
 
-          {/* Touch controls */}
-          <TouchControls visible={showControls} onInputChange={handleTouchInput} />
+
         </div>
       )}
     </>
