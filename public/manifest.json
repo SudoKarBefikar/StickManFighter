@@ -1,0 +1,16 @@
+{
+  "name": "Stickman Fighter Online",
+  "short_name": "StickFight",
+  "description": "Real-time 2-player fighting game with P2P multiplayer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030712",
+  "theme_color": "#030712",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
