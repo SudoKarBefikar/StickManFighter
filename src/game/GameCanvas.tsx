@@ -212,7 +212,7 @@ export default function GameCanvas({ network, playerName, onDisconnect }: Props)
           ...stateRef.current,
           particles: [],
           damageTexts: [],
-          lightningBolts: stateRef.current.lightningBolts.map(b => ({...b, segments: b.segments.slice(0, 3)})),
+          lightningBolts: stateRef.current.lightningBolts.map(b => ({...b, segments: b.segments?.slice(0, 3) || []})),
         };
         network.send({ type: 'state', state: toSend, seq: frame });
       }

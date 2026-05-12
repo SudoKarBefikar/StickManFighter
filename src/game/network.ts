@@ -89,7 +89,9 @@ export class NetworkManager {
     return new Promise((resolve, reject) => {
       this.isHost = false;
       this.roomCode = code.toUpperCase();
-      const peerId = `stickfight-${this.roomCode}-guest-${Math.random().toString(36).slice(2,6)}`;
+      // Use more secure random ID generation
+      const randomId = Math.random().toString(36).substring(2, 8) + Date.now().toString(36).slice(-4);
+      const peerId = `stickfight-${this.roomCode}-guest-${randomId}`;
       this.setStatus('connecting');
 
       this.peer = new Peer(peerId, PEER_CONFIG);
@@ -124,12 +126,22 @@ export class NetworkManager {
     });
 
     conn.on('data', (data) => {
+      // Validate incoming message structure to prevent malicious data
+      if (typeof data !== 'object' || data === null || !('type' in data)) {
+        console.warn('Received invalid message format');
+        return;
+      }
       const msg = data as NetMessage;
-      if (msg.type === 'ping') {
+      // Additional type guards for safety
+      if (typeof msg.type !== 'string') {
+        console.warn('Received message with invalid type');
+        return;
+      }
+      if (msg.type === 'ping' && typeof msg.t === 'number') {
         this.send({ type: 'pong', t: msg.t });
         return;
       }
-      if (msg.type === 'pong') {
+      if (msg.type === 'pong' && typeof msg.t === 'number') {
         this.latency = Math.round((Date.now() - msg.t) / 2);
         this.onLatencyUpdate?.(this.latency);
         return;

@@ -16,6 +16,12 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
 }
 
 function hexToRgba(hex: string, alpha: number): string {
+  // Validate hex color format
+  if (typeof hex !== 'string' || !hex.startsWith('#') || (hex.length !== 4 && hex.length !== 7)) {
+    console.warn(`Invalid hex color: ${hex}, using fallback`);
+    return `rgba(255, 255, 255, ${alpha})`; // Fallback to white
+  }
+
   // Handle shorthand (#fff) and full (#ffffff) hex colors
   let r: number, g: number, b: number;
   if (hex.length === 4) {
@@ -28,10 +34,15 @@ function hexToRgba(hex: string, alpha: number): string {
     g = parseInt(hex.slice(3, 5), 16);
     b = parseInt(hex.slice(5, 7), 16);
   }
-  // Fallback for any NaN
-  if (isNaN(r)) r = 255;
-  if (isNaN(g)) g = 255;
-  if (isNaN(b)) b = 255;
+  // Fallback for any NaN (shouldn't happen with validation, but safe)
+  if (isNaN(r) || isNaN(g) || isNaN(b)) {
+    console.warn(`Failed to parse hex color: ${hex}, using fallback`);
+    return `rgba(255, 255, 255, ${alpha})`;
+  }
+  // Clamp values to 0-255
+  r = Math.max(0, Math.min(255, r));
+  g = Math.max(0, Math.min(255, g));
+  b = Math.max(0, Math.min(255, b));
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 

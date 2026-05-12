@@ -496,9 +496,11 @@ function updateBolts(s: GameState) {
   const p1 = s.player1, p2 = s.player2;
   s.lightningBolts = s.lightningBolts.filter(b => {
     b.life--;
-    if (b.life % 3 === 0) { for (let i = 1; i < b.segments.length - 1; i++) { const t = i / (b.segments.length - 1); b.segments[i].x = b.x + (b.targetX - b.x) * t + (Math.random() - 0.5) * 40; b.segments[i].y = b.y + (b.targetY - b.y) * t + (Math.random() - 0.5) * 30; } }
+    if (b.segments && b.segments.length > 1) {
+      if (b.life % 3 === 0) { for (let i = 1; i < b.segments.length - 1; i++) { const t = i / (b.segments.length - 1); b.segments[i].x = b.x + (b.targetX - b.x) * t + (Math.random() - 0.5) * 40; b.segments[i].y = b.y + (b.targetY - b.y) * t + (Math.random() - 0.5) * 30; } }
+      if (b.life % 4 === 0) { const rs = b.segments[Math.floor(Math.random() * b.segments.length)]; s.particles.push({ x: rs.x, y: rs.y, vx: (Math.random() - 0.5) * 4, vy: (Math.random() - 0.5) * 4, life: 8 + Math.random() * 8, maxLife: 16, color: Math.random() > 0.5 ? '#fef08a' : '#ffffff', size: 1 + Math.random() * 2, type: 'lightning' }); }
+    }
     if (!b.hasHit && b.life > 15) { const def = b.owner === 'player1' ? p2 : p1; const atk = b.owner === 'player1' ? p1 : p2; boltHit(b, def, s, atk); }
-    if (b.life % 4 === 0) { const rs = b.segments[Math.floor(Math.random() * b.segments.length)]; s.particles.push({ x: rs.x, y: rs.y, vx: (Math.random() - 0.5) * 4, vy: (Math.random() - 0.5) * 4, life: 8 + Math.random() * 8, maxLife: 16, color: Math.random() > 0.5 ? '#fef08a' : '#ffffff', size: 1 + Math.random() * 2, type: 'lightning' }); }
     return b.life > 0;
   });
 }
