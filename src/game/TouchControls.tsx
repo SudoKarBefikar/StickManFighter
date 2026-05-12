@@ -260,27 +260,7 @@ export default function TouchControls({ visible, onInputChange }: Props) {
         </div>
       </div>
 
-      {/* ═══════ JUMP BUTTON (above joystick, like CoD) ═══════ */}
-      <div className="absolute left-[155px] bottom-[110px] pointer-events-auto" style={{ touchAction: 'none' }}>
-        <GlassBtn keyName="jump" size={48}
-          color="rgba(96,165,250,0.15)" borderColor="rgba(96,165,250,0.35)" activeColor="rgba(96,165,250,0.45)"
-          label="JUMP" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.jump}>
-          <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 drop-shadow">
-            <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/>
-          </svg>
-        </GlassBtn>
-      </div>
-
-      {/* ═══════ CROUCH BUTTON (below joystick) ═══════ */}
-      <div className="absolute left-[155px] bottom-[14px] pointer-events-auto" style={{ touchAction: 'none' }}>
-        <GlassBtn keyName="crouch" size={44}
-          color="rgba(96,165,250,0.12)" borderColor="rgba(96,165,250,0.3)" activeColor="rgba(96,165,250,0.4)"
-          label="DUCK" onStart={handleBtnStart} onEnd={handleBtnEnd} pressed={pressed.crouch}>
-          <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 drop-shadow">
-            <path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/>
-          </svg>
-        </GlassBtn>
-      </div>
+      {/* JUMP and DUCK buttons removed - joystick handles these actions */}
     </div>
   );
 }
